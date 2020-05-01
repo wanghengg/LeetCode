@@ -1,4 +1,4 @@
-## 1 [countFactor.cpp](https://github.com/wanghengg/LeetCode/blob/master/others/countFactor.cpp)
+## 1 [countFactor.cpp](./countFactor.cpp)
 
 >输入两个正整数`l`和`r`（不大于`10e9`）；对于满足`l < x < r`的所有`x`，求`x`的所有约数，然后只计数**约数最高位的数码**出现次数；输出：1~9每个数码出现的次数。
 >
