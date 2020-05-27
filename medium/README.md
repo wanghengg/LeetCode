@@ -1,3 +1,8 @@
+# 需要复习的题
+
+1. [addTwoNumbers](#addTwoNumbers)
+2. [countBits](#countBits)
+
 ## `addTwoNumbers`
 
 > 给出两个**非空**的链表用来表示两个非负的整数。其中，它们各自的位数是按照**逆序**的方式存储的，并且它们的每个节点只能存储**一位** 数字。
@@ -86,6 +91,30 @@ vector<int> countBits(int num) {
 
 int main() {
     for (auto iter : countBits(2))
+        std::cout << iter << ' ';
+    return 0;
+}
+```
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+ * i的1的位数为i>>1的1的位数加上i&1(如果最低位为1，即i>>1的1的位数加1，如果最低位为0，
+ * 即i>>1的1的位数。本质上i&1是判断i是否为奇数，如果是，则result[i]=result[i>>2]+1，
+ * 否则，result[i] = result[i>>2]
+ */
+vector<int> countBits(int num) {
+    vector<int> result(num+1, 0);
+    for (int i = 1; i <= num; ++i)
+        result[i] = result[i>>1] + (i&1);
+    return result;
+}
+
+int main() {
+    for (auto iter : countBits(11))
         std::cout << iter << ' ';
     return 0;
 }
