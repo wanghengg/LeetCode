@@ -1,9 +1,9 @@
 # 需要复习的题
 
-1. [addTwoNumbers](#addTwoNumbers)
-2. [countBits](#countBits)
+1. [addTwoNumbers](#2-Add Two Numbers)
+2. [countBits](#338-Counting Bits)
 
-## `addTwoNumbers`
+## `2-Add Two Numbers`
 
 > 给出两个**非空**的链表用来表示两个非负的整数。其中，它们各自的位数是按照**逆序**的方式存储的，并且它们的每个节点只能存储**一位** 数字。
 >
@@ -19,7 +19,7 @@
 > 原因：342 + 465 = 807
 > ```
 
-## `countBits`
+## 338-Counting Bits
 
 > 给定一个非负整数 **`num`**。对于 **0 ≤ i ≤ `num`** 范围中的每个数字 **i** ，计算其二进制数中的 1 的数目并将它们作为数组返回。
 >
@@ -118,5 +118,27 @@ int main() {
         std::cout << iter << ' ';
     return 0;
 }
+```
+
+## 394-Decode String
+
+> 给定一个经过编码的字符串，返回它解码后的字符串。
+>
+> 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+>
+> 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+>
+> 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+>
+> 示例：
+>
+> ```
+> s = "3[a]2[bc]", 返回 "aaabcbc".
+> s = "3[a2[c]]", 返回 "accaccacc".
+> s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
+> ```
+
+```c++
+
 ```
 
