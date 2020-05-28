@@ -1,8 +1,8 @@
 # 需要复习的题
 
-[addTwoNumbers](#2-Add Two Numbers)
+[addTwoNumbers](#2Add-Two-Numbers)
 
-[countBits](#338-Counting Bits)
+[countBits](#338Counting-Bits)
 
 ## `2-Add Two Numbers`
 
