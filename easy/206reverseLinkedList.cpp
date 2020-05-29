@@ -10,17 +10,30 @@ struct ListNode{
     ListNode(int x) : val(x), next(nullptr) {}
 };
 
-class Solution{
+class Solution1{
 public:
     ListNode* reverseList(ListNode* head) {
-        if (head->next == nullptr || head == nullptr)
+        if(head == NULL) return head;
+        if(head->next == NULL){
             return head;
-        ListNode* headSub = reverseList(head->next);
-        ListNode* result = headSub;
-        while (headSub->next != nullptr)
-            headSub = headSub->next;
-        ListNode* temp = new ListNode(head->val);
-        headSub->next = temp;
+        }
+        ListNode* last = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return last;
+    }
+};
+
+class Solution2{
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* result = nullptr;
+        while (head) {
+            ListNode* temp = new ListNode(head->val);
+            temp->next = result;
+            result = temp;
+            head = head->next;
+        }
         return result;
     }
 };
