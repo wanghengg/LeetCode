@@ -8,7 +8,7 @@ using namespace std;
 
 class Solution1{
 public:
-    // 暴力解法
+    // 暴力解法，时间复杂度为O(n*sizeof(int))，空间复杂度为O(n)
     int popCount(int x) {
         int count = 0;
         while (x > 0) {
