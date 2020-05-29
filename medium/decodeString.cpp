@@ -14,55 +14,11 @@ using std::reverse;
 using std::isdigit;
 using std::isalpha;
 
-// Solution1不能通过全部测试，对于测试“ef3[c5[bg]ef]”错误
-//class Solution1{
-//public:
-//    string decodeString(string s) {
-//        string result;
-//        string elem;    // inout的每个元素
-//        int number = 0;
-//        int count = 0;
-//        vector<string> inout;
-//        for (char i : s) {
-//            if (i != ']') {
-//                inout.emplace_back(1, i);
-//                if (i == '[')
-//                    ++count;
-//            }
-//            else {
-//                string leastString;
-//                while (count) {
-//                    while ((elem = inout.back()) != "[") {
-//                        leastString.append(elem);
-//                        inout.pop_back();
-//                    }
-//                    --count;
-//                    inout.pop_back();
-//                    int base = 0;
-//                    while (inout.back() >= "0" && inout.back() <= "9") {
-//                        number = stoi(inout.back()) * (int)pow(10, base++) + number;
-//                        inout.pop_back();
-//                        if (inout.empty())
-//                            break;
-//                    }
-//                    string temp = leastString;
-//                    while (--number)
-//                        leastString.append(temp);
-//                }
-//                while (!inout.empty()) {
-//                    leastString.append(inout.back());
-//                    inout.pop_back();
-//                }
-//                reverse(leastString.begin(), leastString.end());
-//                result += leastString;
-//            }
-//        }
-//        for (const string& iter : inout)
-//            result += iter;
-//        return result;
-//    }
-//};
-
+/*
+ * 使用栈操作解题，当遇到数字和左括号'['时进栈，若遇到有括号']'，则开始出栈直至出栈遇到左括号'['，
+ * 左括号'['出栈之后，栈顶元素一定是当前sub对应的字符串出现的次数，将得到的重复n次的字符串后重新
+ * 压入栈，重复上述操作直至到达字符串结尾。
+ */
 class Solution1{
 public:
     string getDigits(string& s, size_t &ptr) {
@@ -117,9 +73,44 @@ public:
     }
 };
 
+/*
+ * 递归解法，采用分治的思想，解析外层括号之前，先解析内层括号。
+ * 假如该字符串中存在左括号“[”,当碰到左括号"["时，重复上一步骤；
+ * 假如该字符串中不存在“[”了，那么下一个碰到的一定是右括号“]”,
+ * 当碰到右括号“]”,说明以上一个左括号“[”开头的字符到此结束，
+ * 只需要记录该字符串然后再乘以“[”前的数字即可。
+ */
+class Solution2{
+public:
+    string analysis(string s, int& index) {
+        string res;
+        int num = 0;
+        string temp;
+        while (index < s.size()) {
+            if (s[index] >= '0' && s[index] <= '9') {
+                num = 10 * num + s[index] - '0';
+            } else if (s[index] == '[') {
+                temp = analysis(s, ++index);
+                while (num--)
+                    res += temp;
+                num = 0;
+            } else if (s[index] == ']')
+                break;
+            else
+                res += s[index];
+            ++index;
+        }
+        return res;
+    }
+    string decodeString(string s) {
+        int index = 0;
+        return analysis(s, index);
+    }
+};
+
 int main() {
-    Solution1 solution;
-    std::cout << solution.decodeString("ef3[c5[bg]ef]11[leetcode]mn") << std::endl;
+    Solution2 solution;
+    std::cout << solution.decodeString("ef3[2[c4[p]10[bg]ef]3[mn]]") << std::endl;
 
     return 0;
 }
