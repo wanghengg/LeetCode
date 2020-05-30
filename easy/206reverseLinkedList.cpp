@@ -10,6 +10,7 @@ struct ListNode{
     ListNode(int x) : val(x), next(nullptr) {}
 };
 
+// 递归方法
 class Solution1{
 public:
     ListNode* reverseList(ListNode* head) {
@@ -24,6 +25,7 @@ public:
     }
 };
 
+// 迭代方法
 class Solution2{
 public:
     ListNode* reverseList(ListNode* head) {

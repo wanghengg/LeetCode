@@ -292,7 +292,62 @@ int main() {
     cout << solution.rob(nums) << endl;
 
     return 0;
-}z`
+}
+```
+
+## 206-Reverse Linked List
+
+> 反转一个单链表。
+>
+> 示例：
+>
+> ```
+> 输入: 1->2->3->4->5->NULL
+> 输出: 5->4->3->2->1->NULL
+> ```
+
+```c++
+//
+// Created by wangheng on 2020/5/30.
+//
+
+#include <iostream>
+
+struct ListNode{
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+// 递归方法
+class Solution1{
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head == NULL) return head;
+        if(head->next == NULL){
+            return head;
+        }
+        ListNode* last = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return last;
+    }
+};
+
+// 迭代方法
+class Solution2{
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* result = nullptr;
+        while (head) {
+            ListNode* temp = new ListNode(head->val);
+            temp->next = result;
+            result = temp;
+            head = head->next;
+        }
+        return result;
+    }
+};
 ```
 
 ## 1051-Height Checker
