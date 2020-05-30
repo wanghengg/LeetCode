@@ -4,5 +4,12 @@
 >
 > 求在该柱状图中，能够勾勒出来的矩形的最大面积。
 >
-> ![](https://gitee.com/wanghengg/picture/blob/master/img/20200530164641.png)
+> ![image-20200530172337242](https://gitee.com/wanghengg/picture/raw/master/img/image-20200530172337242.png)
+>
+> 示例：
+>
+> ```
+> 输入: [2,1,5,6,2,3]
+> 输出: 10
+> ```
 
