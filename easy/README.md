@@ -348,6 +348,21 @@ public:
         return result;
     }
 };
+
+// 双指针，起始时cur指向head，pre指向cur前面的一个节点
+class Solution3{
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* pre = nullptr, *cur = head;
+        while (cur) {
+            ListNode* temp = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+};
 ```
 
 ## 1051-Height Checker
