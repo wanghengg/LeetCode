@@ -4,5 +4,5 @@
 >
 > 求在该柱状图中，能够勾勒出来的矩形的最大面积。
 >
-> ![](![](https://gitee.com/wanghengg/picture/raw/master/img/20200530164641.png))
+> ![](https://gitee.com/wanghengg/picture/blob/master/img/20200530164641.png)
 
