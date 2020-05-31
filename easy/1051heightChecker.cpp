@@ -22,6 +22,7 @@ public:
     }
 };
 
+// 桶排序
 class Solution2{
 public:
     int heightChecker(vector<int>& heights) {
