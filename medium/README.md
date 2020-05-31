@@ -1,8 +1,9 @@
 # 需要复习的题
 
 1. [addTwoNumbers](#2-Add-Two-Numbers)
-2. [countBits](#338-Counting-Bits)
-3. [decodeString](#394-Decode-String)
+2. [longestPalindromeSubstring](#5-Longest-Palindrome-Substring)
+3. [countBits](#338-Counting-Bits)
+4. [decodeString](#394-Decode-String)
 
 ## `2-Add Two Numbers`
 
@@ -19,6 +20,120 @@
 > 输出：7 -> 0 -> 8
 > 原因：342 + 465 = 807
 > ```
+
+## 5-Longest Palindrome Substring
+
+> 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+>
+> 示例1：
+>
+> ```
+> 输入: "babad"
+> 输出: "bab"
+> 注意: "aba" 也是一个有效答案。
+> ```
+>
+> 示例2：
+>
+> ```
+> 输入: "cbbd"
+> 输出: "bb"
+> ```
+
+**动态规划**
+
+对于一个子串而言，如果它是回文串，并且长度大于 22，那么将它首尾的两个字母去除之后，它仍然是个回文串。例如对于字符串 “ababa”，如果我们已经知道”bab”是回文串，那么“ababa” 一定是回文串，这是因为它的首尾两个字母都是“a”。
+
+根据这样的思路，可以使用动态规划的方法解决本题。我们用`P(i,j)`表示字符串$$s$$的第$$i$$到$$j$$个字母组成的串($$s[i:j]$$)是否为回文串：
+
+$$P(i,j) = \begin{cases}true & 如果子串s[i:j]是回文串 \\ false & 其他情况 \end{cases}$$
+
+这里的其他情况包含两种可能性:
+
+* $$s[i:j]$$本身就不是回文串；
+* $$i > j$$，此时$$s[i:j]$$本身不合法。
+
+那么我们就可以写出动态规划状态转移方程：
+
+$$P(i,j) = P(i+1, j-1) \wedge (S_i == S_j)$$
+
+也就是说，只有$$s[i+1, j-1]$$是回文串，并且$$s$$的第$$i$$和$$j$$个字母相同时，$$s[i:j]$$才会是回文串。
+
+上文的所有讨论是建立在子串长度大于 2 的前提之上的，我们还需要考虑动态规划中的边界条件，即子串的长度为 11或 2。对于长度为 1 的子串，它显然是个回文串；对于长度为 2 的子串，只要它的两个字母相同，它就是一个回文串。因此我们就可以写出动态规划的边界条件：
+
+$$\begin{cases}P(i,i)=true \\ P(i,i+1)=(S_i == S_{i+1})\end{cases}$$
+
+根据这个思路，就可以完成动态规划了，最终的答案为所有$$P(i, j)=true$$中$$j-i+1$$（即子字符串长度）的最大值。**注意：在状态转移方程中，我们是从长度较短的字符串向长度较长的字符串的字符串进行转移的，因此一定要注意动态规划的循环顺序。**
+
+```c++
+//
+// Created by wangheng on 2020/5/31.
+//
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 暴力解法，时间复杂度O(n^3)
+class Solution1{
+public:
+    string longestPalindrome(string s) {
+        int length = s.size();
+        string result;
+        for (int i = 0; i < length; ++i) {
+            for (int j = i; j < length; ++j) {
+                string temp = string(s, i, j - i + 1);
+                if (isPalindrome(temp) && result.size() < temp.size())
+                    result = temp;
+            }
+        }
+        return result;
+    }
+
+    bool isPalindrome(string& s) {
+        string temp = s;
+        reverse(temp.begin(), temp.end());
+        return s == temp;
+    }
+};
+
+
+// 动态规划方法
+class Solution2{
+public:
+    string longestPalindrome(string s) {
+        int length = s.size();
+        vector<vector<int>> dp(length, vector<int>(length));
+        string result;
+        for (int l = 0; l < length; ++l) {
+            for (int i = 0; i + l < length; ++i) {
+                int j = i + l;
+                if (l == 0)
+                    dp[i][j] = 1;
+                else if (l == 1)
+                    dp[i][j] = (s[i] == s[j]);
+                else
+                    dp[i][j] = dp[i+1][j-1] && (s[i] == s[j]);
+                if (dp[i][j] && result.size() < l + 1)
+                    result = s.substr(i, l + 1);
+            }
+        }
+        return result;
+    }
+};
+
+int main() {
+    Solution2 solution;
+    cout << solution.longestPalindrome("eacaeb") << endl;
+    string str1 = "hello";
+
+    return 0;
+}
+```
+
+
 
 ## 338-Counting Bits
 
