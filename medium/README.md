@@ -4,6 +4,7 @@
 2. [longestPalindromeSubstring](#5-Longest-Palindrome-Substring)
 3. [countBits](#338-Counting-Bits)
 4. [decodeString](#394-Decode-String)
+5. [productOfArrayExceptItself](#238-Product-Of-Array-Except-Itself)
 
 ## `2-Add Two Numbers`
 
@@ -252,6 +253,92 @@ int main() {
     cout << solution.longestPalindrome("eacaeb") << endl;
     string str1 = "hello";
 
+    return 0;
+}
+```
+
+
+
+## 238-Product Of Array Except Itself
+
+> 给你一个长度为 $n$的整数数组 $nums$，其中 $n > 1$，返回输出数组 $output$ ，其中 $output[i]$ 等于$nums$ 中除 $nums[i]$ 之外其余各元素的乘积。
+>
+> 示例：
+>
+> ```
+> 输入: [1,2,3,4]
+> 输出: [24,12,8,6]
+> ```
+>
+> 提示：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。
+>
+> 说明: **请不要使用除法**，且在$O(n)$ 时间复杂度内完成此题。
+>
+> 进阶：
+> 你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组**不被视为**额外空间。）
+
+```c++
+//
+// Created by wangheng on 2020/6/4.
+//
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+/*
+ * 左右列表乘积，用索引左侧所有数字的乘积和右侧所有数字的乘积(即前缀与后缀)相乘得到答案。
+ * 初始化两个数组left和right，对于给定索引i，left[i]表示i左侧所有数字的乘积，right[i]
+ * 表示i右侧所有数字的乘积，对于数组left和right，left[0]和right[nums.size()-1]应该
+ * 为0，因为第一个元素左侧没有元素，所以左侧乘积为1，同理，最后一个元素右侧没有元素，所以
+ * 右侧乘积应该为1.
+ * left[i] = left[i-1] * nums[i-1]
+ * right[i] = right[i+1] * nums[i+1]
+ */
+class Solution1{
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int size = nums.size();
+        vector<int> result(size);
+        vector<int> left(size, 1);
+        vector<int> right(size, 1);
+        for (int i = 1; i < size; ++i) {
+            left[i] = left[i-1] * nums[i-1];
+            right[size-i-1] = right[size-i] * nums[size-i];
+        }
+        for (int i = 0; i < size; ++i)
+            result[i] = left[i] * right[i];
+        return result;
+    }
+};
+
+/*
+ * Solution1中result数组只在计算结果的时候使用，为了节省空间，可以使用result当做left使用，
+ * 然后计算出索引i之前的所有元素之和，用一个整数right代替数组right[]，通过迭代的方法计算出
+ * 每步i之后的所有元素之积。
+ */
+class Solution2{
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int size = nums.size();
+        vector<int> result(size, 1);
+        for(int i = 1; i < size; ++i)
+            result[i] = result[i-1] * nums[i-1];
+        int right = 1;
+        for (int i = size-1; i >= 0; --i) {
+            result[i] = result[i] * right;
+            right *= nums[i];
+        }
+        return result;
+    }
+};
+
+int main() {
+    vector<int> nums{1,2,3,4,5};
+    Solution2 solution;
+    vector<int> result = solution.productExceptSelf(nums);
+    for (auto &iter : result)
+        cout << iter << ' ';
     return 0;
 }
 ```
