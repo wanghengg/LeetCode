@@ -98,6 +98,67 @@ int main() {
 }
 ```
 
+## 69-Sqrt X
+
+> 实现 int sqrt(int x) 函数。
+>
+> 计算并返回 x 的平方根，其中 x 是非负整数。
+>
+> 由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+>
+> 示例1：
+>
+> ```
+> 输入: 4
+> 输出: 2
+> ```
+>
+> 示例2：
+>
+> ```
+> 输入: 8
+> 输出: 2
+> 说明: 8 的平方根是 2.82842..., 
+>      由于返回类型是整数，小数部分将被舍去。
+> ```
+
+```c++
+//
+// Created by wangheng on 2020/6/6.
+//
+
+#include <iostream>
+
+class Solution{
+public:
+    int mySqrt(int x) {
+        int lo = 0, hi = x;
+        int ans = -1;
+        // 二分查找
+        while (lo <= hi) {
+            int mid = (lo + hi) >> 1;
+            // 将mid转换为unsigned long long，然后再和mid相乘，得到的结果也是unsigned long long
+            if ((unsigned long long)mid * mid <= x) {
+                ans = mid;
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        return ans;
+    }
+};
+
+int main() {
+    Solution solution;
+    std::cout << solution.mySqrt(2147395599) << std::endl;
+
+    return 0;
+}
+```
+
+
+
 ## 190-Reverse Bits
 
 > 颠倒给定的 32 位无符号整数的二进制位。
