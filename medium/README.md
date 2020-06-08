@@ -6,6 +6,7 @@
 4. [decodeString](#394-Decode-String)
 5. [productOfArrayExceptItself](#238-Product-Of-Array-Except-Itself)
 6. [spiralMatrix](#54-Spiral-Matrix)
+7. [threeSum](#15-Three-Sum)
 
 ## `2-Add Two Numbers`
 
@@ -259,6 +260,89 @@ int main() {
 ```
 
 
+
+## 15-Three Sum
+
+> 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+>
+> 注意：答案中不可以包含重复的三元组。
+>
+> 示例：
+>
+> ```
+> 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+> 
+> 满足要求的三元组集合为：
+> [
+>   [-1, 0, 1],
+>   [-1, -1, 2]
+> ]
+> ```
+
+```c++
+//
+// Created by wangheng on 2020/6/8.
+//
+
+#include <unordered_map>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 双指针法
+class Solution{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int len = nums.size();
+        if (len < 3) return {};
+        // 将nums排序，对排序数组查找两个数之和等于-nums[i]，时间复杂度为O(n)
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> result;
+        for (int i = 0; i < len - 2; ++i) {
+            // 如果第一个数大于0，-nums[i]小于0，由于是有序数组，后面的数全都大于零，
+            // 所以不存在两数之和等于负数
+            if (nums[i] > 0) break;
+            if (i == 0 || nums[i] != nums[i-1]) {
+                int j = i + 1, k = len - 1; // 双指针
+                while (j < k) {
+                    // 当两数之和小于结果时，由于数组时有序的，所以++j，第一个指针右移
+                    if (nums[j] + nums[k] < -nums[i]) {
+                        ++j;
+                        while (j < k && nums[j] == nums[j-1]) ++j;
+                    }
+                    else if (nums[j] + nums[k] == -nums[i]) {
+                        result.push_back(vector<int>{nums[i], nums[j], nums[k]});
+                        --k;
+                        ++j;
+                        // 得到一个结果之后，右移第一个指针直到指向不同的数字，
+                        // 左移第二个指针直到指向不同的数字，避免重复的结果
+                        while (j < k && nums[j] == nums[j-1]) ++j;
+                        while (j < k && nums[k] == nums[k+1]) --k;
+                    } else {
+                        --k;
+                        while (j < k && nums[k] == nums[k+1]) --k;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
+
+int main() {
+    vector<int> nums{-1, 0, 1, 2, -1, -4, 0, 1};
+    Solution solution;
+    auto result = solution.threeSum(nums);
+    for (auto& vec : result) {
+        for (auto &i : vec)
+            cout << i << ' ';
+        cout << endl;
+    }
+
+    return 0;
+}
+```
 
 ## 54-Spiral Matrix
 
