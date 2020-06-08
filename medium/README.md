@@ -261,7 +261,7 @@ int main() {
 > 输出: "bb"
 > ```
 
-**动态规划**
+### 动态规划
 
 对于一个子串而言，如果它是回文串，并且长度大于 22，那么将它首尾的两个字母去除之后，它仍然是个回文串。例如对于字符串 “ababa”，如果我们已经知道”bab”是回文串，那么“ababa” 一定是回文串，这是因为它的首尾两个字母都是“a”。
 
@@ -285,6 +285,28 @@ $$P(i,j) = P(i+1, j-1) \wedge (S_i == S_j)$$
 $$\begin{cases}P(i,i)=true \\ P(i,i+1)=(S_i == S_{i+1})\end{cases}$$
 
 根据这个思路，就可以完成动态规划了，最终的答案为所有$P(i, j)=true$中$j-i+1$（即子字符串长度）的最大值。**注意：在状态转移方程中，我们是从长度较短的字符串向长度较长的字符串的字符串进行转移的，因此一定要注意动态规划的循环顺序。**
+
+### Manacher算法
+
+**臂长**:表示中心扩展算法向外扩展的长度。如果一个位置的最大回文字符串长度为 `2 * length + 1` ，其臂长为 `length`。
+
+**思路与算法**
+
+在中心扩展算法的过程中，我们能够得出每个位置的臂长。那么当我们要得出以下一个位置 i 的臂长时，能不能利用之前得到的信息呢？
+
+答案是肯定的。具体来说，如果位置$j$的臂长为 $length$，并且有 $j + length > i$，如下图所示：
+
+![5_fig1](https://gitee.com/wanghengg/picture/raw/master/img/5_fig1.png)
+
+当在位置 $i$ 开始进行中心拓展时，我们可以先找到 $i$ 关于 $j$ 的对称点 $2 * j - i$。那么如果点 $2 * j - i$ 的臂长等于 $n$，我们就可以知道，点 $i$ 的臂长至少为 $min(j + length - i, n)$。那么我们就可以直接跳过 $i$ 到 $i + min(j + length - i, n)$ 这部分，从 $i + min(j + length - i, n) + 1$ 开始拓展。
+
+我们只需要在中心扩展法的过程中记录右臂在最右边的回文字符串，将其中心作为 $j$，在计算过程中就能最大限度地避免重复计算。
+
+那么现在还有一个问题：如何处理长度为偶数的回文字符串呢？
+
+我们可以通过一个特别的操作将奇偶数的情况统一起来：我们向字符串的头尾以及每两个字符中间添加一个特殊字符 #，比如字符串 aaba 处理后会变成 #a#a#b#a#。那么原先长度为偶数的回文字符串 aa 会变成长度为奇数的回文字符串 #a#a#，而长度为奇数的回文字符串 aba 会变成长度仍然为奇数的回文字符串 #a#b#a#，我们就不需要再考虑长度为偶数的回文字符串了。
+
+注意这里的特殊字符不需要是没有出现过的字母，我们可以使用任何一个字符来作为这个特殊字符。这是因为，当我们只考虑长度为奇数的回文字符串时，每次我们比较的两个字符奇偶性一定是相同的，所以原来字符串中的字符不会与插入的特殊字符互相比较，不会因此产生问题。
 
 ```c++
 //
@@ -376,64 +398,156 @@ int main() {
 
 ```c++
 //
-// Created by wangheng on 2020/6/8.
+// Created by wangheng on 2020/5/31.
 //
 
-#include <unordered_map>
 #include <iostream>
+#include <string>
 #include <vector>
 #include <algorithm>
 using namespace std;
 
-// 双指针法
-class Solution{
+// 暴力解法，时间复杂度O(n^3)
+class Solution1{
 public:
-    vector<vector<int>> threeSum(vector<int>& nums) {
-        int len = nums.size();
-        if (len < 3) return {};
-        // 将nums排序，对排序数组查找两个数之和等于-nums[i]，时间复杂度为O(n)
-        sort(nums.begin(), nums.end());
-        vector<vector<int>> result;
-        for (int i = 0; i < len - 2; ++i) {
-            // 如果第一个数大于0，-nums[i]小于0，由于是有序数组，后面的数全都大于零，
-            // 所以不存在两数之和等于负数
-            if (nums[i] > 0) break;
-            if (i == 0 || nums[i] != nums[i-1]) {
-                int j = i + 1, k = len - 1; // 双指针
-                while (j < k) {
-                    // 当两数之和小于结果时，由于数组时有序的，所以++j，第一个指针右移
-                    if (nums[j] + nums[k] < -nums[i]) {
-                        ++j;
-                        while (j < k && nums[j] == nums[j-1]) ++j;
-                    }
-                    else if (nums[j] + nums[k] == -nums[i]) {
-                        result.push_back(vector<int>{nums[i], nums[j], nums[k]});
-                        --k;
-                        ++j;
-                        // 得到一个结果之后，右移第一个指针直到指向不同的数字，
-                        // 左移第二个指针直到指向不同的数字，避免重复的结果
-                        while (j < k && nums[j] == nums[j-1]) ++j;
-                        while (j < k && nums[k] == nums[k+1]) --k;
-                    } else {
-                        --k;
-                        while (j < k && nums[k] == nums[k+1]) --k;
-                    }
-                }
+    string longestPalindrome(string s) {
+        int length = s.size();
+        string result;
+        for (int i = 0; i < length; ++i) {
+            for (int j = i; j < length; ++j) {
+                string temp = string(s, i, j - i + 1);
+                if (isPalindrome(temp) && result.size() < temp.size())
+                    result = temp;
+            }
+        }
+        return result;
+    }
+
+    bool isPalindrome(string& s) {
+        string temp = s;
+        reverse(temp.begin(), temp.end());
+        return s == temp;
+    }
+};
+
+
+// 动态规划方法
+class Solution2{
+public:
+    string longestPalindrome(string s) {
+        int length = s.size();
+        // dp[i][j]用来表示字符串s的第i个字母到第j个字母组成的子串是否为回文串
+        vector<vector<int>> dp(length, vector<int>(length));
+        string result;
+        // l表示j-i，即子串的长度减1
+        for (int l = 0; l < length; ++l) {
+            for (int i = 0; i + l < length; ++i) {
+                int j = i + l;
+                if (l == 0)
+                    dp[i][j] = 1;   // i==j，子串长度为1时，肯定是回文串
+                else if (l == 1)
+                    dp[i][j] = (s[i] == s[j]);  // 子串长度为2时，两个字母相等才是回文串
+                else
+                    dp[i][j] = dp[i+1][j-1] && (s[i] == s[j]);
+                // s[i:j]是回文字符串且长度大于前一个回文串的长度
+                if (dp[i][j] && result.size() < l + 1)
+                    result = s.substr(i, l + 1);
             }
         }
         return result;
     }
 };
 
-int main() {
-    vector<int> nums{-1, 0, 1, 2, -1, -4, 0, 1};
-    Solution solution;
-    auto result = solution.threeSum(nums);
-    for (auto& vec : result) {
-        for (auto &i : vec)
-            cout << i << ' ';
-        cout << endl;
+// 中间扩展算法
+class Solution3{
+public:
+    pair<int, int> expandAroundCenter(const string& s, int left, int right) {
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            --left;
+            ++right;
+        }
+        return {left+1, right-1};
     }
+    string longestPalindrome(string s) {
+        int start = 0, end = 0;
+        for (int i = 0; i < s.size(); ++i) {
+            auto centerWithOne = expandAroundCenter(s, i, i);
+            int left1 = centerWithOne.first;
+            int right1 = centerWithOne.second;
+            auto centerWithTwo = expandAroundCenter(s, i, i+1);
+            int left2 = centerWithTwo.first;
+            int right2 = centerWithTwo.second;
+            if (right1 - left1 > end - start) {
+                start = left1;
+                end = right1;
+            }
+            if (right2 - left2 > end - start) {
+                start = left2;
+                end = right2;
+            }
+        }
+        return s.substr(start, end - start + 1);
+    }
+};
+
+// Manacher算法
+class Solution4 {
+public:
+    int expand(const string& s, int left, int right) {
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            --left;
+            ++right;
+        }
+        return (right - left - 2) / 2;
+    }
+
+    string longestPalindrome(string s) {
+        int start = 0, end = -1;
+        string t = "#";
+        for (char c: s) {
+            t += c;
+            t += '#';
+        }
+        t += '#';
+        s = t;
+
+        vector<int> arm_len;
+        int right = -1, j = -1;
+        for (int i = 0; i < s.size(); ++i) {
+            int cur_arm_len;
+            if (right >= i) {
+                int i_sym = j * 2 - i;
+                int min_arm_len = min(arm_len[i_sym], right - i);
+                cur_arm_len = expand(s, i - min_arm_len, i + min_arm_len);
+            }
+            else {
+                cur_arm_len = expand(s, i, i);
+            }
+            arm_len.push_back(cur_arm_len);
+            if (i + cur_arm_len > right) {
+                j = i;
+                right = i + cur_arm_len;
+            }
+            if (cur_arm_len * 2 + 1 > end - start) {
+                start = i - cur_arm_len;
+                end = i + cur_arm_len;
+            }
+        }
+
+        string ans;
+        for (int i = start; i <= end; ++i) {
+            if (s[i] != '#') {
+                ans += s[i];
+            }
+        }
+        return ans;
+    }
+};
+
+int main() {
+    Solution4 solution;
+    cout << solution.longestPalindrome("eacaeb") << endl;
+    string str1 = "hello";
 
     return 0;
 }
