@@ -13,25 +13,20 @@ struct ListNode {
 class Solution{
 public:
     ListNode* swapPairs(ListNode* head) {
-        if (head == nullptr || head->next == nullptr) return head;
-        ListNode* result = head->next;
-        ListNode* first = head;
-        ListNode* second = first->next;
-        ListNode* header = new ListNode(0);
-        while (first != nullptr && second != nullptr) {
-            first->next = first->next->next;
-            ListNode* temp = first;
-            first = second;
-            first->next = temp;
-            second = first->next;
-            header->next = first;
-            header = second;
-            if (second->next == nullptr || second->next->next == nullptr)
-                break;
-            first = first->next->next;
-            second = first->next;
+        ListNode* prevHead = new ListNode(-1);
+        ListNode* prev = prevHead;
+        while(head != nullptr && head->next !=nullptr) {
+            // 记录下下个节点，否则会陷入循环
+            ListNode* succ = head->next->next;
+            prev->next = head->next;
+            prev = prev->next;
+            prev->next = head;
+            head = succ;
+            prev = prev->next;
         }
-        return result;
+        prev->next = head;
+
+        return prevHead->next;
     }
 };
 
