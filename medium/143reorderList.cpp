@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <deque>
 using namespace std;
 struct ListNode{
     int val;
@@ -35,12 +36,41 @@ public:
     }
 };
 
+/*
+ * 利用双向队列，将节点遍历保存在队列中，然后依次从头尾弹出
+ */
+class Solution1{
+public:
+    void reorderList(ListNode* head) {
+        if (head == nullptr) return;
+        deque<ListNode*> que;
+        ListNode* cur = head->next;
+        while (cur) {
+            que.push_back(cur);
+            cur = cur->next;
+        }
+        cur = head;
+        while (!que.empty()) {
+            cur->next = que.back();
+            que.pop_back();
+            if (!que.empty()) {
+                cur->next->next = que.front();
+                que.pop_front();
+                cur = cur->next->next;
+            } else {
+                cur = cur->next;
+            }
+            cur->next = nullptr;
+        }
+    }
+};
+
 int main() {
     ListNode* head = new ListNode(1);
     head->next = new ListNode(2);
     head->next->next = new ListNode(3);
     head->next->next->next = new ListNode(4);
-    Solution solution;
+    Solution1 solution;
     solution.reorderList(head);
     while (head) {
         cout << head->val << ' ';
