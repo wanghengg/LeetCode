@@ -17,13 +17,19 @@ public:
     vector<int> partitionLabels(string S) {
         vector<int> res;
         int length = 0;
-        int start = 0;
+        int start = 0;  // 标记每个划分段起始位置
         for(int i = 0; i < S.size(); i++) {
-            unordered_set<char> fought;
-            if (fought.count(S[i])) continue;
-            auto last = find_end(S.begin(), S.end(), S.begin()+i, S.begin()+i+1);
+            unordered_set<char> fought; // 将已经查找过的字符放在里面，避免重复查找
+            if (fought.count(S[i])) continue;   // 如果当前字符查找过，则跳过查找下一个字符
+            auto last = find_end(S.begin(), S.end(), S.begin()+i, S.begin()+i+1);   // 被查找字符出现的最后一个位置
+
+            // 如果当前查找的字符位置在之前查找位置之后，更新划分段的长度
             length = (last - S.begin() - start + 1 > length) ? last - S.begin() - start + 1 : length;
-            fought.insert(S[i]);
+            fought.insert(S[i]);    // 将已经查找过的字符添加入fought
+
+            // 如果当前查找的字符已经是当前划分段的最后一个字符，则说明此段结束，将此段长度
+            // 添加至res中，然后将段长length重置为0，并将start更新为下一段的第一个字符的位置
+            // 同时将fought清空，用于保存下一段已经查询过的字符
             if (S.begin() + i == S.begin() + length + start - 1) {
                 res.push_back(length);
                 fought.clear();
