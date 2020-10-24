@@ -41,9 +41,33 @@ public:
     }
 };
 
+/*
+ * 贪心算法+双指针
+ */
+class Solution1{
+public:
+    vector<int> partitionLabels(string S) {
+        int last[26];   // 保存26个字母最右端的位置
+        int length = S.size();
+        for (int i = 0; i < length; i++) {
+            last[S[i] - 'a'] = i;
+        }
+        vector<int> partition;
+        int start = 0, end = 0; // 双指针，start指向开始，end指向结束
+        for (int i = 0; i < length; i++) {
+            end = max(end, last[S[i] - 'a']);   // S[i]最后出现的位置如果比end更大，那么更新end
+            if (i == end) { // 知道end等于i，此时说明此段结束，将此段长度保存，将start设置为end+1，继续
+                partition.push_back(end - start + 1);
+                start = end + 1;
+            }
+        }
+        return partition;
+    }
+};
+
 int main() {
     string S = "ababcbacadefegdehijhklij";
-    Solution solution;
+    Solution1 solution;
     vector<int> res = solution.partitionLabels(S);
     for (auto& iter : res) {
         cout << iter << ' ';
