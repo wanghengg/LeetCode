@@ -14,6 +14,9 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 
+/*
+ * 广度优先搜索是每次弹出一个元素，这里是层次遍历，每次应该弹出一层的节点，所以需要一个记录当前层的元素个数的值
+ */
 class Solution{
 public:
     Node* connect(Node* root) {
