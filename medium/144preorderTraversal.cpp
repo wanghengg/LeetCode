@@ -53,11 +53,34 @@ public:
     }
 };
 
+class Solution2{
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        if (root == nullptr) return res;
+        stack<TreeNode*> stk;
+        TreeNode* node = root;
+        stk.emplace(node);
+        while (!stk.empty()) {
+            node = stk.top();
+            res.push_back(node->val);
+            stk.pop();
+            if (node->right != nullptr) stk.emplace(node->right);
+            if (node->left != nullptr) stk.emplace(node->left);
+        }
+        return res;
+    }
+};
+
 int main() {
-    TreeNode* root = new TreeNode(1);
-    root->right = new TreeNode(2);
-    root->right->left = new TreeNode(3);
-    Solution1 solution;
+    TreeNode* root = new TreeNode(5);
+    root->left = new TreeNode(4);
+    root->right = new TreeNode(6);
+    root->left->left = new TreeNode(1);
+    root->left->right = new TreeNode(2);
+    root->right->left = new TreeNode(7);
+    root->right->right = new TreeNode(8);
+    Solution2 solution;
     vector<int> res = solution.preorderTraversal(root);
     for(auto& it : res) {
         cout << it << ' ';
