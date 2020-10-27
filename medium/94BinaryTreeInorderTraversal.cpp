@@ -35,6 +35,23 @@ public:
     }
 };
 
+// 递归写法
+class Solution1{
+public:
+    void inorder(TreeNode* root, vector<int>& res) {
+        if (root == nullptr) return;
+        inorder(root->left, res);
+        res.push_back(root->val);
+        inorder(root->right, res);
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        if (root == nullptr) return res;
+        inorder(root, res);
+        return res;
+    }
+};
+
 int main() {
     TreeNode* root = new TreeNode(1);
     root->right = new TreeNode(2);
