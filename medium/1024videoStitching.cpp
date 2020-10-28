@@ -28,7 +28,7 @@ public:
 class Solution1{
 public:
     int videoStitching(vector<vector<int>>& clips, int T) {
-         vector<int> maxn(T);
+         vector<int> maxn(T);   // 对于每一个位置 i，记录以其为左端点的子区间中最远的右端点，记为maxn[i]
          int last = 0, ret = 0, pre = 0;
          for (vector<int>& it : clips) {
              if (it[0] < T) {
@@ -37,8 +37,8 @@ public:
          }
 
          for (int i = 0; i < T; i++) {
-             last = max(last, maxn[i]);
-             if (i == last) {
+             last = max(last, maxn[i]); // 每次更新last
+             if (i == last) {   // 如果更新后的last等于i，说明下一个位置无法被覆盖
                  return -1;
              }
              // pre记录上一个被使用的子区间的结束位置，每次越过一个被使用的子区间，就说明要启用一个新的区间，
