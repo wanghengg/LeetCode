@@ -25,6 +25,10 @@ public:
     }
 
     /** Removes a value from the collection. Returns true if the collection contained the specified element. */
+    /*
+     * remove操作的重点在于删除时应该将最后一个元素复制到要删除元素第一次出现的位置，然后直接删除最后一个元素，只需要O(1)的时间
+     * 如果直接在val第一次出现的位置删除val，由于vector在内存中连续存储，删除操作的时间复杂度为O(n)，不满足题目要求
+     */
     bool remove(int val) {
         if (!index.count(val)) return false;
         // 判断val是否存在
