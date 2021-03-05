@@ -21,11 +21,20 @@ public:
     }
 };
 
+/*
+ * 因为两个数组的长度已知，所以中位数的下标也是已知的，用两个指针分别指向两个数组下标0的位置，每次将指向较小值的指针
+ * 后移一位(如果一个指针已经到达数组末尾，则只需要移动另一个数组的指针)，知道达到中位数的位置，这种实现的时间复杂度
+ * 是O(m+n)，空间复杂度是O(1)
+ */
 class Solution1{
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        if (nums1.empty() && nums2.empty()) return 0;
-        if (nums1.empty())
+        int p1 = 0, p2 = 0;
+        int length = nums1.size() + nums2.size();
+        int mid;    // 中位数的位置，或者两个中位数的第一个位置
+        if (length % 2 == 0) {
+            
+        }
     }
 };
 
