@@ -145,9 +145,66 @@ public:
     }
 };
 
+// 2021-3-9日复习
+class Solution5{
+public:
+    // 动态规划法，最常规
+    string longestPalindrome(string s) {
+        int length = s.size();
+        vector<vector<int>> dp(length, vector<int>(length));
+        string res;
+        for (int i = 0; i < length; i++) {
+            dp[i][i] = 1;
+            if (res.empty())
+                res = s[i];
+            if (i < length && s[i] == s[i+1]) {
+                dp[i][i+1] = 1;
+                if (res.size() < 2)
+                    res = s.substr(i,2);
+            }
+        }
+        for (int i = length - 3; i >= 0; i--) {
+            for (int j = i + 2; j < length; j++) {
+                if (dp[i+1][j-1] == 1 && s[i] == s[j]) {
+                    dp[i][j] = 1;
+                    if (res.size() < j-i+1)
+                        res = s.substr(i,j-i+1);
+                }
+            }
+        }
+        return res;
+    }
+
+    // 中间扩展法
+    pair<int, int> expandAroundCenter(const string& s, int left, int right) {
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            --left;
+            ++right;
+        }
+        return {left+1, right-1};
+    }
+
+    string longestPalindrome1(string s) {
+        int start = 0, end = 0;
+        for (int i = 0; i < s.size(); ++i) {
+            auto [left1, right1] = expandAroundCenter(s, i, i);
+            auto [left2, right2] = expandAroundCenter(s, i, i+1);
+            if (right1 - left1 > end -start) {
+                start = left1;
+                end = right1;
+            }
+            if (right2 - left2 > end - start) {
+                start = left2;
+                end = right2;
+            }
+        }
+        return s.substr(start, end - start + 1);
+    }
+};
+
 int main() {
-    Solution4 solution;
-    cout << solution.longestPalindrome("eacaeb") << endl;
+    Solution5 solution;
+    cout << solution.longestPalindrome1("babad") << endl;
     string str1 = "hello";
 
     return 0;
