@@ -23,7 +23,7 @@ private:
         if (i >= rows || i < 0 || j >= columns || j < 0 || board[i][j] != word[k])
             return false;
         if (k == word.size() - 1) return true;
-        board[i][j] = '\0';
+        board[i][j] = '\0'; // 标记当前访问位
         bool res = dfs(board, word, i+1, j, k+1) ||
                 dfs(board, word, i-1, j, k+1) ||
                 dfs(board, word, i, j+1, k+1) ||
