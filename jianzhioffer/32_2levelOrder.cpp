@@ -46,6 +46,7 @@ public:
             vector<int> level;
             while (len--) {
                 TreeNode* front = bfs.front();
+                bfs.pop();
                 level.push_back(front->val);
                 if (front->left) bfs.push(front->left);
                 if (front->right) bfs.push(front->right);
