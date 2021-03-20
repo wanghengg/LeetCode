@@ -29,8 +29,27 @@ public:
     }
 };
 
+class Solution2{
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int first = 0;
+        int last = nums.size() - 1;
+        while (first <= last) {
+            while (first < nums.size() && nums[first] != val) {
+                first++;
+            }
+            while (last >= 0 && nums[last] == val) {
+                last--;
+            }
+            if (first > last) break;
+            swap(nums[first], nums[last]);
+        }
+        return last+1;
+    }
+};
+
 int main() {
-    Solution1 solution;
+    Solution2 solution;
     vector<int> nums{3,2,2,3};
     int val = 3;
     cout << solution.removeElement(nums, val) << endl;
