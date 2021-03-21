@@ -39,6 +39,7 @@ public:
         if (root == nullptr) return res;
         stack<TreeNode*> stk;
         TreeNode* node = root;
+        // 当root不为nullptr时，一直入栈直至root为nullptr，然后弹出一个元素，root更改为右节点
         while (!stk.empty() || node != nullptr) {
             while (node != nullptr) {
                 res.emplace_back(node->val);
@@ -55,6 +56,7 @@ public:
 
 class Solution2{
 public:
+    // 更容易理解
     vector<int> preorderTraversal(TreeNode* root) {
         vector<int> res;
         if (root == nullptr) return res;
