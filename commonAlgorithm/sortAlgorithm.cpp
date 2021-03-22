@@ -40,6 +40,23 @@ public:
         }
     }
 
+    // 如果没有数据交换，提前结束
+    void bubbleSort1(vector<int>& nums) {
+        int length = nums.size();
+        for (int i = 0; i < length; ++i) {
+            bool flags = false;
+            for (int j = 0; j < length - i - 1; ++j) {
+                if (nums[j] > nums[j+1]) {
+                    int tmp = nums[j];
+                    nums[j] = nums[j+1];
+                    nums[j+1] = tmp;
+                    flags = true;
+                }
+            }
+            if (!flags) break;  // 没有数据交换，已经有序，直接退出循环
+        }
+    }
+
     // 快速排序，时间复杂度O(nlogn)，不稳定
     void quickSort(vector<int>& nums, int start, int end) {
         // 如果区间只有一个元素，递归结束
