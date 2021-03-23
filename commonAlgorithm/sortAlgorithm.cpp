@@ -61,25 +61,25 @@ public:
     void quickSort(vector<int>& nums, int start, int end) {
         // 如果区间只有一个元素，递归结束
         if (start >= end) return;
-        int tmp = nums[start];    // 将区间的第一个数当做基准
+        int pivot = nums[start];    // 将区间的第一个数当做基准
         int left = start;          // 指向最左位置
         int right = end;            // 指向最右位置
         while (left < right) {
             // 当右边的数大于基准数时，略过，继续向左查找
             // 不满足条件时跳出循环，此时的j对应的元素是小于基准元素的
-            while (left < right && nums[right] >= tmp)
+            while (left < right && nums[right] > pivot)
                 right--;
             // 将右边小于等于基准元素的数填入左边相应位置
             nums[left] = nums[right];
             // 当左边的数小于等于基准数时，略过，继续向右查找
             // 不满足条件时跳出循环，此时的i对应的元素是大于等于基准元素的
-            while (left < right && nums[left] <= tmp)
+            while (left < right && nums[left] < pivot)
                 left++;
             // 将左边大于基准元素的数填入右边相应位置
             nums[right] = nums[left];
         }
         // 将基准元素填入相应位置
-        nums[left] = tmp;
+        nums[left] = pivot;
         // 此时的i即为基准元素的位置
         // 对基准元素的左边子区间进行相似的快速排序
         quickSort(nums, start, left - 1);
