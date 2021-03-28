@@ -14,6 +14,21 @@ public:
         }
         return nums[0];
     }
+
+    int findRepeatNumber1(vector<int>& nums) {
+        int length = nums.size();
+        for (int i = 0; i < length; ++i) {
+            while (nums[i] != i) {
+                if (nums[i] == nums[nums[i]]) {
+                    return nums[i];
+                }
+                int temp = nums[i];
+                nums[i] = nums[nums[i]];
+                nums[nums[i]] = temp;
+            }
+        }
+        return false;
+    }
 };
 
 
