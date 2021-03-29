@@ -10,6 +10,25 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
+class Solution2{
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> stack;
+        while (!stack.empty() || root != nullptr) {
+            while (root != nullptr) {
+                stack.push(root);
+                root = root->left;
+            }
+            root = stack.top();
+            res.emplace_back(root->val);
+            stack.pop();
+            root = root->right;
+        }
+        return res;
+    }
+};
+
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
