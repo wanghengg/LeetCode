@@ -17,7 +17,7 @@ public:
         TreeNode* cur = new TreeNode(0);
         while (!stack.empty() || root != nullptr) {
             while (root != nullptr) {
-                stack.emplace(root->right);
+                stack.emplace(root->right); // 因为后面root的右子节点会更改，所以先把右子树的根节点保存下来
                 cur->right = root;
                 cur->left = nullptr;
                 cur = cur->right;
