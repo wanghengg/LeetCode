@@ -13,7 +13,7 @@ public:
                 num.erase(0, 1);
             } else {
                 int index = 1;
-                while (num[index] >= num[index - 1]) {
+                while (index < num.size() && num[index] >= num[index - 1]) {
                     ++index;
                 }
                 num.erase(index-1, 1);
@@ -28,7 +28,7 @@ public:
 };
 
 int main() {
-    string num{"10"};
+    string num{"123"};
     Solution solution;
     cout << solution.removeKdigits(num, 2) << endl;
     return 0;
