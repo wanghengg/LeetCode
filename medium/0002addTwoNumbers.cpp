@@ -10,6 +10,32 @@ struct ListNode {
     ListNode(int x) : val(x), next(nullptr) {}
 };
 
+// 简洁漂亮的两数相加
+class Solution1{
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode(0);
+        ListNode* pre = dummy;
+        ListNode* p1 = l1;
+        ListNode* p2 = l2;
+        int carry = 0;
+        while (p1 != nullptr || p2 != nullptr) {
+            int x = (p1 == nullptr) ? 0 : p1->val;
+            int y = (p2 == nullptr) ? 0 : p2->val;
+            int sum = x + y + carry;
+            pre->next = new ListNode(sum % 10);
+            carry = sum / 10;
+            pre = pre->next;
+            if (p1) p1 = p1->next;
+            if (p2) p2 = p2->next;
+        }
+        if (carry) {
+            pre->next = new ListNode(carry);
+        }
+        return dummy->next;
+    }
+};
+
 // 时间复杂度为O(n)，只进行一次扫描
 class Solution{
 public:
