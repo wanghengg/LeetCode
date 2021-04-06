@@ -43,9 +43,25 @@ public:
     }
 };
 
+// 自底向上，迭代解法
+class Solution2{
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, amount + 1);  // dp[i]表示凑够总金额为i所需最少硬币数量
+        dp[0] = 0;
+        for (int i = 1; i <= amount; ++i) {
+            for (auto& coin : coins) {
+                if (i - coin < 0) continue;
+                dp[i] = min(dp[i], 1 + dp[i-coin]);
+            }
+        }
+        return (dp[amount] == amount + 1) ? -1 : dp[amount];
+    }
+};
+
 int main() {
-    Solution1 solution;
-    vector<int> coins{1,2,5};
+    Solution2 solution;
+    vector<int> coins{2,5};
     int amount = 11;
     cout << solution.coinChange(coins, amount) << endl;
     return 0;
