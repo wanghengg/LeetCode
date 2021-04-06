@@ -47,7 +47,7 @@ public:
 class Solution2{
 public:
     int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount + 1, amount + 1);  // dp[i]表示凑够总金额为i所需最少硬币数量
+        vector<int> dp(amount + 1, amount + 1);  // dp[i]表示凑够总金额为i所需最少硬币数量，将其初始化为不可能的结果
         dp[0] = 0;
         for (int i = 1; i <= amount; ++i) {
             for (auto& coin : coins) {
