@@ -1,29 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution{
-public:
-    set<multiset<int>> methods;
-    multiset<int> method;
-
-    void traceback(int amount, vector<int>& coins) {
-        if (amount == 0) {
-            methods.insert(method);
-            method.clear();
-            return;
-        }
-        for (auto& coin : coins) {
-            if (amount - coin < 0) continue;
-            method.insert(coin);
-            traceback(amount - coin, coins);
-        }
-    }
-    int change(int amount, vector<int>& coins) {
-        traceback(amount, coins);
-        return methods.size();
-    }
-};
-
 class Solution1{
 public:
     int change(int amount, vector<int>& coins) {
