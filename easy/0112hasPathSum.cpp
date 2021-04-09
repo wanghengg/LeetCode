@@ -17,13 +17,13 @@ struct TreeNode{
 class Solution{
 public:
     bool hasPathSum(TreeNode* root, int targetSum) {
-        if (root == nullptr) {
+        if (root == nullptr) {  // 当前节点为nullptr，直接返回false
             return false;
         }
-        targetSum -= root->val;
+        targetSum -= root->val; // 每次将targetSum减去当前节点值
         if (targetSum == 0 && root->left == nullptr && root->right == nullptr) {
-            return true;
+            return true;    // targetSum刚好为0且当前节点为叶子结点时返回true
         }
-        return hasPathSum(root->left, targetSum) || hasPathSum(root->right, targetSum);
+        return hasPathSum(root->left, targetSum) || hasPathSum(root->right, targetSum); // 递归
     }
 };
