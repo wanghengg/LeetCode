@@ -19,7 +19,7 @@ public:
                 return true;
             }
             data.insert(nums[i]);
-            if (i >= k) {
+            if (i >= k) {   // 长度大于k
                 data.erase(nums[i-k]);
             }
         }
