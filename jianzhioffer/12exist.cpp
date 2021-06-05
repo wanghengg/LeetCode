@@ -28,7 +28,7 @@ private:
                 dfs(board, word, i-1, j, k+1) ||
                 dfs(board, word, i, j+1, k+1) ||
                 dfs(board, word, i, j-1, k+1);
-        board[i][j] = word[k];
+        board[i][j] = word[k];  // 回溯
         return res;
     }
 };
