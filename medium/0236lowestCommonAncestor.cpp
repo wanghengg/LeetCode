@@ -14,7 +14,7 @@ struct TreeNode{
 
 class Solution{
 public:
-    void dfs(vector<TreeNode*> path, TreeNode* root, TreeNode* target, vector<TreeNode*> target_path) {
+    void dfs(vector<TreeNode*>& path, TreeNode* root, TreeNode* target, vector<TreeNode*>& target_path) {
         if (root == nullptr) {
             return;
         }
