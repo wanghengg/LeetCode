@@ -40,6 +40,28 @@ public:
     }
 };
 
+class Solution1{
+public:
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 2) return false;    // 数组长度小于2，不可划分，直接返回false
+        int sum = accumulate(nums.begin(), nums.end(), 0);  // 计算数组nums的和
+        if (sum & 1) return false;  // 如果sum是奇数，不能分为两部分，直接返回false
+        int target = sum / 2;
+        int maxNum = *max_element(nums.begin(), nums.end());
+        if (maxNum > target) return false;  // 如果最大值直接大于target，那么数组不可分为和相等的两部分，直接返回false
+        vector<int> dp(target+1, 0);   // 只用一维数组解决0-1背包问题
+        dp[0] = true;   // 和为0可以组成
+        for (int i = 0; i < n; ++i) {
+            int num = nums[i];
+            for (int j = target; j >= num; --j) {
+                dp[j] |= dp[j-num];
+            }
+        }
+        return dp[target];
+    }
+};
+
 int main() {
     vector<int> nums = {1,5,5,11};
     Solution solution;
