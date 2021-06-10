@@ -24,6 +24,11 @@ public:
                     if (j < members) {  // 员工数比第i个工作所需要的员工数小
                         dp[i][j][k] = dp[i-1][j][k];
                     } else {
+                        /*
+                         * max(0, k-earn)的意义：
+                         * 当第i个工作的利润已经超过minProfit时，说明前面的任务都不需要选择，而且dp数组第三维是工作利润至少为k，
+                         * 将k-earn<0的情况包含在k=0的情况中
+                         */
                         dp[i][j][k] =  (dp[i-1][j][k] + dp[i-1][j-members][max(0, k-earn)]) % 1000000007;
                     }
                 }
