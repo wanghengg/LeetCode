@@ -57,34 +57,23 @@ public:
         }
     }
 
-    // 快速排序，时间复杂度O(nlogn)，不稳定
+// 快速排序，时间复杂度O(nlogn)，不稳定
     void quickSort(vector<int>& nums, int start, int end) {
         // 如果区间只有一个元素，递归结束
         if (start >= end) return;
         int pivot = nums[start];    // 将区间的第一个数当做基准
-        int left = start;          // 指向最左位置
-        int right = end;            // 指向最右位置
-        while (left < right) {
-            // 当右边的数大于基准数时，略过，继续向左查找
-            // 不满足条件时跳出循环，此时的j对应的元素是小于基准元素的
-            while (left < right && nums[right] > pivot)
-                right--;
-            // 将右边小于等于基准元素的数填入左边相应位置
-            nums[left] = nums[right];
-            // 当左边的数小于等于基准数时，略过，继续向右查找
-            // 不满足条件时跳出循环，此时的i对应的元素是大于等于基准元素的
-            while (left < right && nums[left] < pivot)
-                left++;
-            // 将左边大于基准元素的数填入右边相应位置
-            nums[right] = nums[left];
+        swap(nums[start], nums[end]);   // 将基准放到最后
+        int index = start;
+        for (int i = start; i < end; ++i) { // 从左往右遍历，将小于等于pivot的数放在左边
+            if (nums[i] <= pivot) {
+                swap(nums[index++], nums[i]);
+            }
         }
-        // 将基准元素填入相应位置
-        nums[left] = pivot;
-        // 此时的i即为基准元素的位置
+        swap(nums[index], nums[end]);   // 将基准交换回来
         // 对基准元素的左边子区间进行相似的快速排序
-        quickSort(nums, start, left - 1);
+        quickSort(nums, start, index - 1);
         //对基准元素的右边子区间进行相似的快速排序
-        quickSort(nums, left + 1, end);
+        quickSort(nums, index + 1, end);
     }
 
     // 插入排序，时间复杂度O(n^2)，稳定
@@ -157,8 +146,8 @@ public:
 int main() {
     SortAlgorithm sortAlgorithm;
     vector<int> nums = {2,8,2,1,9,3,7};
-    vector<int> result = sortAlgorithm.mergeSort(nums);
-    for (auto& iter : result) {
+    sortAlgorithm.quickSort(nums, 0, nums.size()-1);
+    for (auto& iter : nums) {
         cout << iter << ' ';
     }
 
