@@ -20,8 +20,25 @@ public:
     }
 };
 
+class Solution1{
+public:
+    bool canJump(vector<int>& nums) {
+        int right = 0;  // right表示当前能达到的最右位置的下标
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            if (i <= right) {   // 如果当前位置i能到达
+                right = max(right, i + nums[i]);    // 更新能到达的最右位置
+                if (right >= n - 1) {   // 如果能到达的最右位置大于等于数组的最右位置，直接返回true
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
 int main() {
-    Solution solution;
+    Solution1 solution;
     vector<int> nums{3,2,1,0,4};
     cout << boolalpha << solution.canJump(nums) << endl;
     return 0;
