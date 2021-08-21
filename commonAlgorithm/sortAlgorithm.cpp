@@ -92,7 +92,7 @@ public:
     // 希尔排序
     void shellSort(vector<int>& nums) {}
 
-    // 选择排序，时间复杂度O(n)，不稳定
+    // 选择排序，时间复杂度O(n^2)，不稳定
     void selectSort(vector<int>& nums) {
         int length = nums.size();
         for (int i = 0; i < length - 1; ++i) {
@@ -106,10 +106,10 @@ public:
         }
     }
 
-    // 堆排序
+    // 堆排序，时间复杂度O(nlogn)，不稳定
     void heapSort(vector<int>& nums) {}
 
-    // 归并排序
+    // 归并排序，稳定
     vector<int> merge(vector<int> a, vector<int> b) {
         vector<int> res;
         int ia = 0, ib = 0;
