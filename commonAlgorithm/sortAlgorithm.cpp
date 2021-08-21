@@ -110,35 +110,32 @@ public:
     void heapSort(vector<int>& nums) {}
 
     // 归并排序，稳定
-    vector<int> merge(vector<int> a, vector<int> b) {
+    void merge(vector<int>&nums, int start, int mid, int end) {
         vector<int> res;
-        int ia = 0, ib = 0;
-        while (ia < a.size() && ib < b.size()) {
-            if (a[ia] < b[ib]) {
-                res.push_back(a[ia++]);
+        int i = start, j = mid+1;
+        while (i <= mid && j <= end) {
+            if (nums[i] <= nums[j]) {
+                res.emplace_back(nums[i++]);
             } else {
-                res.push_back(b[ib++]);
+                res.emplace_back(nums[j++]);
             }
         }
-        if (ia == a.size()) {
-            while (ib < b.size()) {
-                res.push_back(b[ib++]);
-            }
+        while (i <= mid) {
+            res.emplace_back(nums[i++]);
         }
-        if (ib == b.size()) {
-            while (ia < a.size()) {
-                res.push_back(a[ia++]);
-            }
+        while (j <= end) {
+            res.emplace_back(nums[j++]);
         }
-        return res;
+        for(i = start, j = 0; i <= end; i++, j++) {
+            nums[i] = res[j];
+        }
     }
-    vector<int> mergeSort(vector<int> nums) {
-        int length = nums.size();
-        if (length < 2) return nums;
-        int mid = length / 2;
-        vector<int> front(nums.begin(), nums.begin() + mid);
-        vector<int> back(nums.begin() + mid, nums.end());
-        return merge(mergeSort(front), mergeSort(back));
+    void mergeSort(vector<int>& nums, int start, int end) {
+        if (start >= end) return;
+        int mid = start + (end - start) / 2;
+        mergeSort(nums, start, mid);
+        mergeSort(nums, mid+1, end);
+        merge(nums, start, mid, end);
     }
 };
 
@@ -146,7 +143,7 @@ public:
 int main() {
     SortAlgorithm sortAlgorithm;
     vector<int> nums = {2,8,2,1,9,3,7};
-    sortAlgorithm.quickSort(nums, 0, nums.size()-1);
+    sortAlgorithm.mergeSort(nums, 0, nums.size()-1);
     for (auto& iter : nums) {
         cout << iter << ' ';
     }
