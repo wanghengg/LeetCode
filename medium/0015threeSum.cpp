@@ -46,6 +46,34 @@ public:
     }
 };
 
+class Solution1{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 3) return {};
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        for(int first = 0; first < n-2; first++) {
+            if (first > 0 && nums[first] == nums[first-1]) continue;    // 重复元素直接往后
+            int third = n-1;
+            int target = -nums[first];
+            for(int second = first+1; second < n-1; ++second) {
+                if (second > first+1 && nums[second] == nums[second-1]) {
+                    continue;
+                }
+                while (second < third && nums[second] + nums[third] > target) {
+                    --third;
+                }
+                if (second == third) break;
+                if (nums[second] + nums[third] == target) {
+                    res.emplace_back(vector<int>{nums[first], nums[second], nums[third]});
+                }
+            }
+        }
+        return res;
+    }
+};
+
 int main() {
     vector<int> nums{-1, 0, 1, 2, -1, -4, 0, 1};
     Solution solution;
